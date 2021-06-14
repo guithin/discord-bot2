@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import stamp from 'console-stamp';
 import { init as DBInit } from './db';
 import { setManager } from './discordWrap';
 import { autoDeleteF } from './tts/autoDelete';
@@ -51,6 +52,7 @@ const managerInitialize = async () => {
 }
 
 async function main() {
+  stamp(console);
   await baseInitialize();
   await manager.login();
   await managerInitialize();
