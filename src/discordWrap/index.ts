@@ -19,11 +19,12 @@ class DiscordManager {
     this.token = token;
   }
 
-  start() {
-    this.client.login(this.token);
-    this.client.on('ready', () => {
-      console.log(`[${this.client.user?.tag}] servise start`);
-    });
+  login() {
+    return this.client.login(this.token);
+  }
+
+  handleStart() {
+    console.log(`[${this.client.user?.tag}] servise start`);
     this.client.on('message', (msg) => {
       const lst = msg.content.trim().split(' ');
       if (lst.length > 0) {

@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.3.0",
+    "lodash": "^4.17.21",
     "mysql2": "^2.2.5",
     "sequelize": "^6.6.2",
     "tsconfig-paths": "^3.9.0",

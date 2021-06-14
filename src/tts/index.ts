@@ -3,19 +3,14 @@ import Discord from 'discord.js';
 import { DRequestHandler, getManager } from 'src/discordWrap';
 import googleTTS from 'src/googleTTS';
 import util from 'src/util';
-import {
-  Disabled,
-} from 'src/db';
 import { autoDelete, initialize as adInit } from './autoDelete';
-
-let disabled = new Set<string>();
+import { disabled, initialize as dsInit } from './disabled';
 const queue: { [key: string]: string[]; } = {};
 const channelLocked: { [key: string]: boolean; } = {};
 
 export const initialize = async () => {
-  const lst = await Disabled.getAllDisbled().then((r) => r.map((rr) => rr.gid));
-  disabled = new Set(lst);
   await adInit();
+  await dsInit();
   getManager().client.guilds.cache.forEach(({ id }) => {
     queue[id] = [];
     channelLocked[id] = false;
@@ -112,6 +107,5 @@ export const stop = (gid: string) => {
 
 export const stopProc: DRequestHandler = (_, msg) => {
   if (!msg.guild) return;
-  if (msg.content.trim().split(' ')[1].trim() !== 'tts') return;
   stop(msg.guild.id);
 };

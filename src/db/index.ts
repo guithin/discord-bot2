@@ -1,12 +1,13 @@
+import { Model, Options, Sequelize } from 'sequelize';
 import Disabled from './models/Disabled';
 import AutoDelete from './models/AutoDelete';
-import { Model, Options } from 'sequelize';
-import { Sequelize } from 'sequelize';
+import Notice from './models/Notice';
 import { createDB } from './dbBase';
 
 const tableList: ((typeof Model) & { tableinit: (s: Sequelize) => void; })[] = [
   Disabled,
   AutoDelete,
+  Notice,
 ];
 
 let inited = false;

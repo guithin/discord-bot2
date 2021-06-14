@@ -33,7 +33,7 @@ export const autoDeleteF: DRequestHandler = (manager, msg) => {
       util.replyAndDelete(msg, '자동삭제가 꺼졌습니다.');
     });
   } else {
-    util.replyAndDelete(msg, 'on / off 중에 사용하실 수 있습니다/');
+    util.replyAndDelete(msg, 'on / off 중에 사용하실 수 있습니다.');
   }
 };
 

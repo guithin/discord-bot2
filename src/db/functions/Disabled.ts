@@ -10,4 +10,10 @@ export const getDisabled = (gid: BigInt) => Disabled.findOne({
   },
 });
 
+export const deleteDisabled = (gid: BigInt) => Disabled.destroy({
+  where: {
+    gid: gid.toString(),
+  }
+});
+
 export const getAllDisbled = () => Disabled.findAll();
