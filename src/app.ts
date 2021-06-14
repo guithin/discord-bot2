@@ -40,6 +40,7 @@ const baseInitialize = async () => {
       supportBigNumbers: true,
       bigNumberStrings: true,
     },
+    logging: process.env.NODE_ENV === 'dev' ? console.log : false,
   });
 };
 

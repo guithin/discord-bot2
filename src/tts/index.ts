@@ -11,9 +11,21 @@ const channelLocked: { [key: string]: boolean; } = {};
 export const initialize = async () => {
   await adInit();
   await dsInit();
-  getManager().client.guilds.cache.forEach(({ id }) => {
+  const manager = getManager();
+  manager.client.guilds.cache.forEach(({ id }) => {
     queue[id] = [];
     channelLocked[id] = false;
+  });
+  manager.client.on('voiceStateUpdate', (oldStage, newState) => {
+    const conn = newState.client.voice?.connections.get(newState.guild.id);
+    if (!conn) return;
+    let mCnt = 0;
+    conn.channel.members.forEach((m) => {
+      if (!m.user.bot) mCnt++;
+    });
+    if (mCnt <= 0) {
+      stop(newState.guild.id);
+    }
   });
 };
 
