@@ -6,25 +6,25 @@ class DiscordManager {
   client = new Discord.Client({
     intents: [
       'Guilds', //
-      'GuildMembers',
-      'GuildModeration',
-      'GuildBans',
-      'GuildEmojisAndStickers',
-      'GuildIntegrations',
-      'GuildWebhooks',
-      'GuildInvites',
+      // 'GuildMembers',
+      // 'GuildModeration',
+      // 'GuildBans',
+      // 'GuildEmojisAndStickers',
+      // 'GuildIntegrations',
+      // 'GuildWebhooks',
+      // 'GuildInvites',
       'GuildVoiceStates', //
-      'GuildPresences',
+      // 'GuildPresences',
       'GuildMessages', //
-      'GuildMessageReactions',
+      // 'GuildMessageReactions',
       'GuildMessageTyping', //
-      'DirectMessages',
-      'DirectMessageReactions',
-      'DirectMessageTyping',
+      // 'DirectMessages',
+      // 'DirectMessageReactions',
+      // 'DirectMessageTyping',
       'MessageContent', //
-      'GuildScheduledEvents',
-      'AutoModerationConfiguration',
-      'AutoModerationExecution',
+      // 'GuildScheduledEvents',
+      // 'AutoModerationConfiguration',
+      // 'AutoModerationExecution',
     ],
   });
 
