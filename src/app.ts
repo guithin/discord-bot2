@@ -50,7 +50,7 @@ const managerInitialize = async () => {
   manager.attach('"autoDelete', autoDeleteF);
   manager.attach('"disable', setDisabled);
   await TTSinit();
-}
+};
 
 async function main() {
   stamp(console);

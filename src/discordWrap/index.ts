@@ -3,15 +3,38 @@ import Discord, { Permissions } from 'discord.js';
 export type DRequestHandler = (manager: DiscordManager, msg: Discord.Message) => unknown;
 
 class DiscordManager {
-  client = new Discord.Client();
+  client = new Discord.Client({
+    intents: [
+      'Guilds',
+      // 'GuildMembers',
+      // 'GuildModeration',
+      // 'GuildBans',
+      // 'GuildEmojisAndStickers',
+      // 'GuildIntegrations',
+      // 'GuildWebhooks',
+      // 'GuildInvites',
+      'GuildVoiceStates',
+      // 'GuildPresences',
+      'GuildMessages',
+      // 'GuildMessageReactions',
+      'GuildMessageTyping',
+      // 'DirectMessages',
+      // 'DirectMessageReactions',
+      // 'DirectMessageTyping',
+      'MessageContent',
+      // 'GuildScheduledEvents',
+      // 'AutoModerationConfiguration',
+      // 'AutoModerationExecution',
+    ],
+  });
 
   handleMapper: { [key: string]: DRequestHandler } = {};
 
-  needPermission =
-    Permissions.FLAGS.SEND_MESSAGES |
-    Permissions.FLAGS.MANAGE_MESSAGES |
-    Permissions.FLAGS.CONNECT |
-    Permissions.FLAGS.SPEAK;
+  // needPermission =
+  //   Permissions.FLAGS.SEND_MESSAGES |
+  //   Permissions.FLAGS.MANAGE_MESSAGES |
+  //   Permissions.FLAGS.CONNECT |
+  //   Permissions.FLAGS.SPEAK;
 
   token: string;
 
@@ -25,7 +48,7 @@ class DiscordManager {
 
   handleStart() {
     console.log(`[${this.client.user?.tag}] servise start`);
-    this.client.on('message', (msg) => {
+    this.client.on('messageCreate', (msg) => {
       const lst = msg.content.trim().split(' ');
       if (lst.length > 0) {
         this.handle(lst[0], msg);
