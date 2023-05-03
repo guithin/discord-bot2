@@ -1,30 +1,30 @@
-import Discord, { Permissions } from 'discord.js';
+import Discord from 'discord.js';
 
 export type DRequestHandler = (manager: DiscordManager, msg: Discord.Message) => unknown;
 
 class DiscordManager {
   client = new Discord.Client({
     intents: [
-      'Guilds',
-      // 'GuildMembers',
-      // 'GuildModeration',
-      // 'GuildBans',
-      // 'GuildEmojisAndStickers',
-      // 'GuildIntegrations',
-      // 'GuildWebhooks',
-      // 'GuildInvites',
-      'GuildVoiceStates',
-      // 'GuildPresences',
-      'GuildMessages',
-      // 'GuildMessageReactions',
-      'GuildMessageTyping',
-      // 'DirectMessages',
-      // 'DirectMessageReactions',
-      // 'DirectMessageTyping',
-      'MessageContent',
-      // 'GuildScheduledEvents',
-      // 'AutoModerationConfiguration',
-      // 'AutoModerationExecution',
+      'Guilds', //
+      'GuildMembers',
+      'GuildModeration',
+      'GuildBans',
+      'GuildEmojisAndStickers',
+      'GuildIntegrations',
+      'GuildWebhooks',
+      'GuildInvites',
+      'GuildVoiceStates', //
+      'GuildPresences',
+      'GuildMessages', //
+      'GuildMessageReactions',
+      'GuildMessageTyping', //
+      'DirectMessages',
+      'DirectMessageReactions',
+      'DirectMessageTyping',
+      'MessageContent', //
+      'GuildScheduledEvents',
+      'AutoModerationConfiguration',
+      'AutoModerationExecution',
     ],
   });
 

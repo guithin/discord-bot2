@@ -19,6 +19,7 @@ const needEnvs = [
   'DB_SCHEME_NAME',
   'DB_PASSWD',
   'DB_USERNAME',
+  'APP_ID',
 ];
 
 const baseInitialize = async () => {

@@ -7,6 +7,7 @@ declare global {
       DB_PASSWD: string;
       TOKEN: string;
       DB_USERNAME: string;
+      APP_ID: string;
       [key: string]: string;
     }
   }

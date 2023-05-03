@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Discord from 'discord.js';
+import Discord, { Events, SlashCommandBuilder, REST, Routes } from 'discord.js';
 import {
   joinVoiceChannel,
   getVoiceConnection,
@@ -54,6 +54,28 @@ export const initialize = async () => {
       }
     }
   });
+  const dt = new SlashCommandBuilder()
+    .setName('help')
+    .setDescription('사용법 안내');
+  manager.client.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isCommand()) return;
+    interaction.reply(`
+\`" [text]\`: text를 음성으로 변환하여 재생합니다.
+\`"stop\`: 음성 재생을 중지합니다.
+\`"autoDelete [on|off]\`: 자동 삭제 기능을 설정합니다.
+\`"disabled [on|off]\`: 음성 재생을 비활성화합니다. (관리자만 가능)
+
+버그리포트 및 기능제안: on14@naver.com
+    `);
+  });
+
+  const rest = new REST().setToken(process.env.TOKEN);
+  await rest.put(
+    Routes.applicationCommands(process.env.APP_ID),
+    {
+      body: [dt.toJSON()]
+    }
+  );
 };
 
 const checkQueueAndPlay = async (gid: string) => {
@@ -75,7 +97,11 @@ const checkQueueAndPlay = async (gid: string) => {
     if (typeof now !== 'undefined') {
       const res = await axios.get(googleTTS(now, { lang: 'ko', }), {
         responseType: 'stream',
-      });
+        timeout: 10000,
+      }).catch(() => null);
+      if (res === null) {
+        return;
+      }
       audioPlayer[gid].play(createAudioResource(res.data, { inputType: StreamType.Arbitrary }));
     }
   });
@@ -103,6 +129,7 @@ const pushQueue = async (msg: Discord.Message, str: string) => {
 export const TTS: DRequestHandler = async (manager, msg) => {
   const { channel, guild } = msg;
   if (!guild) return;
+  if (msg.author.bot) return;
   if (!(channel instanceof Discord.TextChannel)) return;
   if (disabled.has(guild.id)) {
     return util.replyAndDelete(msg, '봇이 비활성화 되어있습니다. 관리자에게 문의하세요.', 1000);
