@@ -100,6 +100,8 @@ const checkQueueAndPlay = async (gid: string) => {
         timeout: 10000,
       }).catch(() => null);
       if (res === null) {
+        resolve();
+        audioLock[gid] = null;
         return;
       }
       audioPlayer[gid].play(createAudioResource(res.data, { inputType: StreamType.Arbitrary }));
