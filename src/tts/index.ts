@@ -62,7 +62,7 @@ export const initialize = async () => {
     .setDescription('자동 삭제 기능을 확인합니다.');
   const adSet = new SlashCommandBuilder()
     .setName('autodeletetoggle')
-    .setDescription('자동 삭제 기능을 토그합니다.');
+    .setDescription('자동 삭제 기능을 토글합니다.');
 
   manager.client.on(Events.InteractionCreate, (interaction) => {
     if (!interaction.isCommand()) {
