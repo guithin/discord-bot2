@@ -57,23 +57,63 @@ export const initialize = async () => {
   const dt = new SlashCommandBuilder()
     .setName('help')
     .setDescription('사용법 안내');
+  const adChk = new SlashCommandBuilder()
+    .setName('autodeletecheck')
+    .setDescription('자동 삭제 기능을 확인합니다.');
+  const adSet = new SlashCommandBuilder()
+    .setName('autodeletetoggle')
+    .setDescription('자동 삭제 기능을 토그합니다.');
+
   manager.client.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isCommand()) return;
-    interaction.reply(`
+    if (!interaction.isCommand()) {
+      return;
+    }
+    
+    console.log(interaction.commandName);
+    if (interaction.commandName === 'help') {
+      interaction.reply(`
 \`" [text]\`: text를 음성으로 변환하여 재생합니다.
 \`"stop\`: 음성 재생을 중지합니다.
 \`"autoDelete [on|off]\`: 자동 삭제 기능을 설정합니다.
 \`"disabled [on|off]\`: 음성 재생을 비활성화합니다. (관리자만 가능)
 
 버그리포트 및 기능제안: on14@naver.com
-    `);
+      `);
+      return;
+    }
+
+    if (interaction.commandName === 'autodeletecheck') {
+      const { guild, user } = interaction;
+      if (!guild || !user) {
+        console.log(guild?.id, user?.id)
+        return;
+      }
+      interaction.reply(`자동 삭제 기능이 ${autoDelete[user.id]?.has(guild.id) ? '활성화' : '비활성화'} 되어있습니다.`);
+      return;
+    }
+
+    if (interaction.commandName === 'autodeletetoggle') {
+      const { guild, user } = interaction;
+      if (!guild || !user) return;
+      if (!autoDelete[user.id]) {
+        autoDelete[user.id] = new Set();
+      }
+      if (autoDelete[user.id].has(guild.id)) {
+        autoDelete[user.id].delete(guild.id);
+        interaction.reply('자동 삭제 기능이 비활성화 되었습니다.');
+        return;
+      }
+      autoDelete[user.id].add(guild.id);
+      interaction.reply('자동 삭제 기능이 활성화 되었습니다.');
+      return;
+    }
   });
 
   const rest = new REST().setToken(process.env.TOKEN);
   await rest.put(
     Routes.applicationCommands(process.env.APP_ID),
     {
-      body: [dt.toJSON()]
+      body: [dt.toJSON(), adChk.toJSON(), adSet.toJSON()],
     }
   );
 };
