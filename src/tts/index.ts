@@ -14,8 +14,6 @@ import {
 import { DRequestHandler, getManager } from 'src/discordWrap';
 import googleTTS from 'src/googleTTS';
 import util from 'src/util';
-import { autoDelete, initialize as adInit } from './autoDelete';
-import { disabled, initialize as dsInit } from './disabled';
 
 const queue: { [key: string]: string[]; } = {};
 const audioPlayer: { [key: string]: AudioPlayer; } = {};
@@ -27,8 +25,6 @@ const audioLock: {
 } = {};
 
 export const initialize = async () => {
-  await adInit();
-  await dsInit();
 
   const manager = getManager();
   const guilds = await manager.client.guilds.fetch();
@@ -74,39 +70,37 @@ export const initialize = async () => {
       interaction.reply(`
 \`" [text]\`: text를 음성으로 변환하여 재생합니다.
 \`"stop\`: 음성 재생을 중지합니다.
-\`"autoDelete [on|off]\`: 자동 삭제 기능을 설정합니다.
-\`"disabled [on|off]\`: 음성 재생을 비활성화합니다. (관리자만 가능)
 
 버그리포트 및 기능제안: on14@naver.com
       `);
       return;
     }
 
-    if (interaction.commandName === 'autodeletecheck') {
-      const { guild, user } = interaction;
-      if (!guild || !user) {
-        console.log(guild?.id, user?.id)
-        return;
-      }
-      interaction.reply(`자동 삭제 기능이 ${autoDelete[user.id]?.has(guild.id) ? '활성화' : '비활성화'} 되어있습니다.`);
-      return;
-    }
+    // if (interaction.commandName === 'autodeletecheck') {
+    //   const { guild, user } = interaction;
+    //   if (!guild || !user) {
+    //     console.log(guild?.id, user?.id)
+    //     return;
+    //   }
+    //   interaction.reply(`자동 삭제 기능이 ${autoDelete[user.id]?.has(guild.id) ? '활성화' : '비활성화'} 되어있습니다.`);
+    //   return;
+    // }
 
-    if (interaction.commandName === 'autodeletetoggle') {
-      const { guild, user } = interaction;
-      if (!guild || !user) return;
-      if (!autoDelete[user.id]) {
-        autoDelete[user.id] = new Set();
-      }
-      if (autoDelete[user.id].has(guild.id)) {
-        autoDelete[user.id].delete(guild.id);
-        interaction.reply('자동 삭제 기능이 비활성화 되었습니다.');
-        return;
-      }
-      autoDelete[user.id].add(guild.id);
-      interaction.reply('자동 삭제 기능이 활성화 되었습니다.');
-      return;
-    }
+    // if (interaction.commandName === 'autodeletetoggle') {
+    //   const { guild, user } = interaction;
+    //   if (!guild || !user) return;
+    //   if (!autoDelete[user.id]) {
+    //     autoDelete[user.id] = new Set();
+    //   }
+    //   if (autoDelete[user.id].has(guild.id)) {
+    //     autoDelete[user.id].delete(guild.id);
+    //     interaction.reply('자동 삭제 기능이 비활성화 되었습니다.');
+    //     return;
+    //   }
+    //   autoDelete[user.id].add(guild.id);
+    //   interaction.reply('자동 삭제 기능이 활성화 되었습니다.');
+    //   return;
+    // }
   });
 
   const rest = new REST().setToken(process.env.TOKEN);
@@ -121,7 +115,7 @@ export const initialize = async () => {
 const checkQueueAndPlay = async (gid: string) => {
   const voiceConn = getVoiceConnection(gid);
   if (!voiceConn) return;
-  if (disabled.has(gid)) return;
+  // if (disabled.has(gid)) return;
   if (queue[gid].length === 0) {
     return;
   }
@@ -154,13 +148,18 @@ const pushQueue = async (msg: Discord.Message, str: string) => {
   if (!msg.guild) return;
   const uid = msg.author.id;
   const gid = msg.guild.id;
-  if (autoDelete[uid] && autoDelete[uid].has(gid)) {
     setTimeout(() => {
       if (msg.deletable) {
         msg.delete();
       }
     }, 1000 * 60 * 2);
-  }
+  // if (autoDelete[uid] && autoDelete[uid].has(gid)) {
+  //   setTimeout(() => {
+  //     if (msg.deletable) {
+  //       msg.delete();
+  //     }
+  //   }, 1000 * 60 * 2);
+  // }
   console.log(`[push query]: ${uid} -> ${gid} -- ${str}`);
   queue[gid].push(str);
   if (audioLock[gid] === null) {
@@ -173,9 +172,9 @@ export const TTS: DRequestHandler = async (manager, msg) => {
   if (!guild) return;
   if (msg.author.bot) return;
   if (!(channel instanceof Discord.TextChannel)) return;
-  if (disabled.has(guild.id)) {
-    return util.replyAndDelete(msg, '봇이 비활성화 되어있습니다. 관리자에게 문의하세요.', 1000);
-  }
+  // if (disabled.has(guild.id)) {
+  //   return util.replyAndDelete(msg, '봇이 비활성화 되어있습니다. 관리자에게 문의하세요.', 1000);
+  // }
   const str = msg.content.trim().slice(1).trim();
   if (str.length < 1) return;
   if (str.length > 100) return msg.reply('message too long');
