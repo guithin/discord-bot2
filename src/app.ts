@@ -11,11 +11,11 @@ const manager = setManager(process.env.TOKEN);
 
 const needEnvs = [
   'TOKEN',
-  'DB_HOST',
-  'DB_PORT',
-  'DB_SCHEME_NAME',
-  'DB_PASSWD',
-  'DB_USERNAME',
+  // 'DB_HOST',
+  // 'DB_PORT',
+  // 'DB_SCHEME_NAME',
+  // 'DB_PASSWD',
+  // 'DB_USERNAME',
   'APP_ID',
 ];
 

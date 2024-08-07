@@ -150,7 +150,7 @@ const pushQueue = async (msg: Discord.Message, str: string) => {
   const gid = msg.guild.id;
     setTimeout(() => {
       if (msg.deletable) {
-        msg.delete();
+        msg.delete().catch(() => {});
       }
     }, 1000 * 60 * 2);
   // if (autoDelete[uid] && autoDelete[uid].has(gid)) {
