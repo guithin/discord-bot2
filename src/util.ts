@@ -12,6 +12,7 @@ const isAdmin = async (userId: string, guild: Discord.Guild): Promise<boolean> =
   return flag;
 };
 
+
 const findUserVoiceChannel = (userId: string, channels: Discord.GuildChannelManager): Discord.VoiceChannel | null => {
   for (let [_, c] of channels.cache) {
     if (c instanceof Discord.VoiceChannel && c.members.has(userId)) return c;
@@ -19,7 +20,7 @@ const findUserVoiceChannel = (userId: string, channels: Discord.GuildChannelMana
   return null;
 };
 
-const replyAndDelete = (msg: Discord.Message, str: string, time = 3000) =>  {
+const replyAndDelete = (msg: Discord.Message, str: string, time = 3000) => {
   msg.reply(str).then((r) => {
     if (time > 0) {
       setTimeout(() => {
